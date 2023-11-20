@@ -1,0 +1,31 @@
+--[[ Dummy 
+
+02/09/23
+(OnConfig) = start .
+]]
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Knit = require(ReplicatedStorage.Packages:FindFirstChild("Knit"))
+
+local Promise = require(Knit.Util.Promise)
+local SettingSignal = require(script:WaitForChild("Setting"))
+
+local menu = {}
+menu.__index = menu
+
+function menu.new()
+	local self = setmetatable({},menu)
+	self.SettingSignal = SettingSignal.new()
+	return self
+end
+
+menu.DragComponent = require(script:WaitForChild("DragComponent"))
+menu.InventoryMainModule = require(script:WaitForChild("InventoryModule.all"))
+
+function menu:Init()
+	if assert(self.SettingSignal.initialized ~= nil, `{self.initialized} can't be nil `) then 
+		return self.SettingSignal:OnConfig()
+	end
+end
+
+return menu
